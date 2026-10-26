@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snezhnaya Café | คาเฟ่แห่งสายลมเหนือ</title>
+  <meta name="description" content="คาเฟ่ธีม Snezhnaya จาก Genshin Impact — รสชาติอันอบอุ่นท่ามกลางความหนาวเย็น">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0a1628;
+      --primary-light: #132337;
+      --accent: #c9a227;
+      --accent-soft: #e8d48b;
+      --snow: #f0f4f8;
+      --ice: #a8c5d4;
+      --text: #e8eef4;
+      --text-muted: #9bb0c4;
+      --card-bg: rgba(19, 35, 55, 0.85);
+      --gold-glow: 0 0 20px rgba(201, 162, 39, 0.3);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans Thai', 'Cinzel', serif;
+      background: var(--primary);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse at top, rgba(30, 60, 90, 0.4) 0%, transparent 60%),
+        linear-gradient(180deg, #0a1628 0%, #0d1a2d 50%, #0a1628 100%);
+      overflow-x: hidden;
+    }
+
+    /* Snow */
+    .snow {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 9999; overflow: hidden;
+    }
+    .snowflake {
+      position: absolute; color: rgba(255,255,255,0.7);
+      animation: fall linear infinite;
+      text-shadow: 0 0 5px rgba(168,197,212,0.8);
+    }
+    @keyframes fall {
+      0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0.3; }
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+      background: rgba(10,22,40,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,162,39,0.25);
+      transition: all 0.3s ease;
+    }
+    .navbar.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.4); }
+    .nav-container {
+      max-width: 1200px; margin: 0 auto; padding: 0.9rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 0.6rem;
+      text-decoration: none; color: var(--accent); cursor: pointer;
+    }
+    .logo-icon { font-size: 1.8rem; filter: drop-shadow(0 0 8px rgba(201,162,39,0.5)); }
+    .logo-text { font-family: 'Cinzel', serif; font-size: 1.35rem; font-weight: 700; letter-spacing: 1px; }
+    .logo-text span { color: var(--ice); font-weight: 400; }
+
+    .nav-links { display: flex; list-style: none; gap: 1.8rem; }
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none; font-size: 0.95rem;
+      font-weight: 500; letter-spacing: 0.5px; position: relative;
+      transition: color 0.3s; cursor: pointer;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 2px; background: var(--accent); transition: width 0.3s ease;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent-soft); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+
+    .menu-toggle {
+      display: none; background: none; border: none;
+      color: var(--accent); font-size: 1.6rem; cursor: pointer;
+    }
+
+    /* Pages */
+    .page { display: none; min-height: 100vh; }
+    .page.active { display: block; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative; padding: 6rem 1.5rem 4rem;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(201,162,39,0.08) 0%, transparent 40%),
+        radial-gradient(circle at 70% 80%, rgba(168,197,212,0.1) 0%, transparent 40%);
+    }
+    .hero-content { max-width: 800px; z-index: 2; }
+    .hero-badge {
+      display: inline-block; padding: 0.35rem 1.2rem;
+      border: 1px solid rgba(201,162,39,0.5); border-radius: 50px;
+      font-size: 0.85rem; color: var(--accent-soft); letter-spacing: 2px;
+      text-transform: uppercase; margin-bottom: 1.5rem;
+      background: rgba(201,162,39,0.08);
+    }
+    .hero h1 {
+      font-family: 'Cinzel', serif; font-size: clamp(2.5rem, 6vw, 4.2rem);
+      font-weight: 700; line-height: 1.2; margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 0%, var(--accent-soft) 50%, var(--ice) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero h1 .russian {
+      display: block; font-size: 0.55em; letter-spacing: 4px;
+      margin-top: 0.3rem; opacity: 0.85;
+    }
+    .hero-desc {
+      font-size: 1.15rem; color: var(--text-muted); max-width: 560px;
+      margin: 0 auto 2.5rem; font-weight: 300;
+    }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.9rem 2rem; border-radius: 8px; font-size: 1rem;
+      font-weight: 500; text-decoration: none; transition: all 0.3s ease;
+      cursor: pointer; border: none; font-family: inherit;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent) 0%, #a8861f 100%);
+      color: #0a1628; box-shadow: var(--gold-glow);
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(201,162,39,0.45); }
+    .btn-outline {
+      background: transparent; color: var(--accent-soft);
+      border: 1.5px solid rgba(201,162,39,0.6);
+    }
+    .btn-outline:hover { background: rgba(201,162,39,0.12); border-color: var(--accent); }
+
+    /* Sections */
+    .section { padding: 5rem 1.5rem; max-width: 1200px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 3.5rem; }
+    .section-header .subtitle {
+      color: var(--accent); font-size: 0.9rem; letter-spacing: 3px;
+      text-transform: uppercase; margin-bottom: 0.6rem;
+    }
+    .section-header h2 {
+      font-family: 'Cinzel', serif; font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--snow); margin-bottom: 0.8rem;
+    }
+    .section-header p { color: var(--text-muted); max-width: 500px; margin: 0 auto; }
+    .divider {
+      width: 80px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      margin: 1rem auto;
+    }
+
+    /* Feature cards */
+    .features {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.8rem;
+    }
+    .feature-card {
+      background: var(--card-bg); border: 1px solid rgba(201,162,39,0.15);
+      border-radius: 16px; padding: 2rem; text-align: center;
+      transition: all 0.35s ease; position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .feature-card:hover {
+      transform: translateY(-8px); border-color: rgba(201,162,39,0.4);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3), var(--gold-glow);
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon { font-size: 2.8rem; margin-bottom: 1.2rem; filter: drop-shadow(0 0 10px rgba(168,197,212,0.4)); }
+    .feature-card h3 { font-family: 'Cinzel', serif; font-size: 1.25rem; margin-bottom: 0.7rem; color: var(--accent-soft); }
+    .feature-card p { color: var(--text-muted); font-size: 0.95rem; }
+
+    /* Page hero */
+    .page-hero {
+      padding: 8rem 1.5rem 3rem; text-align: center;
+      background: radial-gradient(ellipse at center top, rgba(201,162,39,0.1) 0%, transparent 50%);
+    }
+    .page-hero h1 {
+      font-family: 'Cinzel', serif; font-size: clamp(2rem, 5vw, 3rem);
+      color: var(--snow); margin-bottom: 0.5rem;
+    }
+    .page-hero p { color: var(--text-muted); }
+
+    /* Menu */
+    .menu-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;
+    }
+    .menu-category {
+      background: var(--card-bg); border: 1px solid rgba(201,162,39,0.18);
+      border-radius: 16px; padding: 1.8rem; overflow: hidden;
+    }
+    .menu-category h3 {
+      font-family: 'Cinzel', serif; font-size: 1.4rem; color: var(--accent);
+      margin-bottom: 1.5rem; padding-bottom: 0.8rem;
+      border-bottom: 1px solid rgba(201,162,39,0.25);
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .menu-item {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding: 0.9rem 0; border-bottom: 1px dashed rgba(168,197,212,0.15);
+    }
+    .menu-item:last-child { border-bottom: none; }
+    .menu-item-info h4 { font-size: 1.05rem; color: var(--snow); margin-bottom: 0.25rem; }
+    .menu-item-info p { font-size: 0.85rem; color: var(--text-muted); }
+    .menu-item .price {
+      font-family: 'Cinzel', serif; color: var(--accent); font-weight: 600;
+      white-space: nowrap; margin-left: 1rem;
+    }
+
+    /* About */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+    }
+    .about-image {
+      background: linear-gradient(145deg, #1a2f4a, #0f1e30); border-radius: 20px;
+      height: 400px; display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(201,162,39,0.25);
+    }
+    .about-image .placeholder { font-size: 5rem; opacity: 0.6; }
+    .about-content h2 {
+      font-family: 'Cinzel', serif; font-size: 2rem; color: var(--accent-soft); margin-bottom: 1.2rem;
+    }
+    .about-content p { color: var(--text-muted); margin-bottom: 1.2rem; }
+    .about-stats { display: flex; gap: 2rem; margin-top: 2rem; }
+    .stat { text-align: center; }
+    .stat-num { font-family: 'Cinzel', serif; font-size: 2rem; color: var(--accent); }
+    .stat-label { font-size: 0.85rem; color: var(--text-muted); }
+
+    /* Gallery */
+    .gallery-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem;
+    }
+    .gallery-item {
+      aspect-ratio: 1; background: linear-gradient(145deg, #1a2f4a, #0f1e30);
+      border-radius: 14px; border: 1px solid rgba(201,162,39,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem; transition: all 0.35s ease; cursor: pointer;
+      position: relative; overflow: hidden;
+    }
+    .gallery-item:hover {
+      transform: scale(1.04); border-color: var(--accent); box-shadow: var(--gold-glow);
+    }
+    .gallery-item span {
+      position: absolute; bottom: 0; left: 0; right: 0; padding: 0.8rem;
+      background: linear-gradient(transparent, rgba(10,22,40,0.9));
+      font-size: 0.9rem; color: var(--accent-soft); text-align: center;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .gallery-item:hover span { opacity: 1; }
+
+    /* Contact */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 3rem; }
+    .contact-info { display: flex; flex-direction: column; gap: 1.8rem; }
+    .info-card {
+      background: var(--card-bg); border: 1px solid rgba(201,162,39,0.18);
+      border-radius: 14px; padding: 1.5rem; display: flex; gap: 1.2rem; align-items: flex-start;
+    }
+    .info-icon { font-size: 1.6rem; color: var(--accent); flex-shrink: 0; }
+    .info-card h4 { color: var(--accent-soft); margin-bottom: 0.3rem; }
+    .info-card p { color: var(--text-muted); font-size: 0.95rem; }
+    .contact-form {
+      background: var(--card-bg); border: 1px solid rgba(201,162,39,0.18);
+      border-radius: 16px; padding: 2rem;
+    }
+    .form-group { margin-bottom: 1.3rem; }
+    .form-group label { display: block; margin-bottom: 0.4rem; color: var(--accent-soft); font-size: 0.9rem; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 0.85rem 1rem; background: rgba(10,22,40,0.6);
+      border: 1px solid rgba(168,197,212,0.25); border-radius: 8px;
+      color: var(--text); font-family: inherit; font-size: 0.95rem; transition: border-color 0.3s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none; border-color: var(--accent);
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* Footer */
+    .footer {
+      background: rgba(8,16,28,0.95); border-top: 1px solid rgba(201,162,39,0.2);
+      padding: 3rem 1.5rem 1.5rem; margin-top: 4rem;
+    }
+    .footer-content {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2.5rem; margin-bottom: 2.5rem;
+    }
+    .footer-brand .logo-text { font-size: 1.3rem; margin-bottom: 0.8rem; }
+    .footer-brand p { color: var(--text-muted); font-size: 0.9rem; max-width: 280px; }
+    .footer h4 { font-family: 'Cinzel', serif; color: var(--accent); margin-bottom: 1rem; font-size: 1.05rem; }
+    .footer ul { list-style: none; }
+    .footer ul li { margin-bottom: 0.5rem; }
+    .footer ul a {
+      color: var(--text-muted); text-decoration: none; font-size: 0.9rem;
+      transition: color 0.3s; cursor: pointer;
+    }
+    .footer ul a:hover { color: var(--accent-soft); }
+    .footer-bottom {
+      max-width: 1200px; margin: 0 auto; padding-top: 1.5rem;
+      border-top: 1px solid rgba(168,197,212,0.1); text-align: center;
+      color: var(--text-muted); font-size: 0.85rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .about-grid, .contact-grid { grid-template-columns: 1fr; }
+      .footer-content { grid-template-columns: 1fr; text-align: center; }
+      .footer-brand p { max-width: 100%; margin: 0 auto; }
+    }
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none; position: absolute; top: 100%; left: 0; width: 100%;
+        background: rgba(10,22,40,0.98); flex-direction: column;
+        padding: 1.5rem; gap: 1.2rem; border-bottom: 1px solid rgba(201,162,39,0.2);
+      }
+      .nav-links.open { display: flex; }
+      .menu-toggle { display: block; }
+      .form-row { grid-template-columns: 1fr; }
+      .about-stats { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="snow" id="snow"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a class="logo" onclick="showPage('home')">
+        <span class="logo-icon">❄</span>
+        <span class="logo-text">Snezhnaya <span>Café</span></span>
+      </a>
+      <button class="menu-toggle" id="menuToggle" aria-label="เมนู">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a data-page="home" class="active">หน้าแรก</a></li>
+        <li><a data-page="menu">เมนู</a></li>
+        <li><a data-page="about">เกี่ยวกับเรา</a></li>
+        <li><a data-page="gallery">แกลเลอรี</a></li>
+        <li><a data-page="contact">ติดต่อ & จองโต๊ะ</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ========== HOME ========== -->
+  <div class="page active" id="page-home">
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">✦ Welcome to the North ✦</div>
+        <h1>
+          Snezhnaya Café
+          <span class="russian">Снежная Кафе</span>
+        </h1>
+        <p class="hero-desc">
+          ก้าวเข้าสู่ดินแดนแห่งน้ำแข็งและทองคำ<br>
+          ที่ซึ่งกาแฟหอมกรุ่นและขนมอบอุ่นรอคุณอยู่<br>
+          ท่ามกลางบรรยากาศอันสง่างามของ Snezhnaya
+        </p>
+        <div class="hero-btns">
+          <a class="btn btn-primary" onclick="showPage('menu')">ดูเมนูทั้งหมด</a>
+          <a class="btn btn-outline" onclick="showPage('contact')">จองโต๊ะเลย</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div class="subtitle">Why Snezhnaya</div>
+        <h2>ประสบการณ์ที่ไม่เหมือนใคร</h2>
+        <div class="divider"></div>
+        <p>ทุกมุมของร้านถูกออกแบบมาเพื่อให้คุณรู้สึกเหมือนได้เดินทางไปยังดินแดนหิมะของ Teyvat</p>
+      </div>
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">☕</div>
+          <h3>กาแฟพิเศษจากเหนือ</h3>
+          <p>เมล็ดกาแฟคั่วพิเศษผสมสมุนไพรท้องถิ่น สร้างรสชาติที่อบอุ่นและซับซ้อน เหมือนไฟในเตาผิงของ Snezhnaya</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">❄</div>
+          <h3>บรรยากาศหิมะโปรยปราย</h3>
+          <p>ตกแต่งด้วยโทนสีน้ำเงินเข้ม ทองคำ และแสงนวลตา ให้ความรู้สึกเหมือนอยู่ในพระราชวังน้ำแข็ง</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🍰</div>
+          <h3>ขนมอบสูตรรัสเซีย</h3>
+          <p>เมดอวิก, ซิร์นิกิ, บลินี และขนมหวานสไตล์ยุโรปตะวันออก ทำสดใหม่ทุกวัน</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="text-align: center; padding-bottom: 6rem;">
+      <div class="section-header">
+        <div class="subtitle">Visit Us</div>
+        <h2>พร้อมเปิดประตูสู่ดินแดนเหนือแล้วหรือยัง?</h2>
+        <div class="divider"></div>
+        <p style="margin-bottom: 2rem;">เปิดทุกวัน 10:00 – 22:00 น. | จองล่วงหน้าแนะนำ</p>
+        <a class="btn btn-primary" onclick="showPage('contact')">จองโต๊ะ / ติดต่อเรา</a>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========== MENU ========== -->
+  <div class="page" id="page-menu">
+    <div class="page-hero">
+      <div class="subtitle" style="color: var(--accent); letter-spacing: 3px; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 0.5rem;">Our Menu</div>
+      <h1>เมนูแห่งสายลมเหนือ</h1>
+      <p>ทุกจานถูกสร้างสรรค์ด้วยความใส่ใจเหมือนของขวัญจาก Tsaritsa</p>
+    </div>
+    <section class="section">
+      <div class="menu-grid">
+        <div class="menu-category">
+          <h3>☕ เครื่องดื่มร้อน</h3>
+          <div class="menu-item"><div class="menu-item-info"><h4>Snezhnaya Latte</h4><p>ลาเต้หอมนมผสมวานิลลาและเกล็ดทองคำ</p></div><span class="price">฿145</span></div>
+          <div class="menu-item"><div class="menu-item-info"><h4>Fatui Espresso</h4><p>เอสเปรสโซเข้มข้น ดับเบิลช็อต</p></div><span class="price">฿95</span></div>
+          <div class="menu-item"><div class="menu-item-info"><h4>Cryo Mocha</h4><p>มอคค่าช็อกโกแลตเข้ม + วิปครีมเย็น</p></div><span class="price">฿155</span></div>
+          <div class="menu-item"><div class="menu-item-info"><h4>Hot Honey Medovukha</h4><p>เครื่องดื่มน้ำผึ้งอบอุ่นสไตล์รัสเซีย (ไม่มีแอลกอฮอล์)</p></div><span class="price">฿125</span></div>
+          <div class="menu-item"><div class="menu-item-info"><h4>Chai Spiced Tea</h4><p>ชาเครื่องเทศหอมอุ่น ผสมขิงและอบเชย</p></div><span class="price">฿110</span></div>
+        </div>
+        <div class="menu-category">
+          <h3>🧊 เครื่องดื่มเย็น</h3>
+          <div class="menu-item"><div class="menu-item-info"><h4>Iced Snezhnaya Latte</h4><p>เวอร์ชันเย็นของลาเต้ซิกเนเจอร์</p></div><span class="price">฿155</span></div>
+          <div class="menu-item"><div class="menu-item-info"><h4>Blueberry Snow Frappe</h4><p>บลูเบอร์รี่ปั่น + วิปครีมหิมะ</p></div><span class="price">฿165</span></div>
+          <div class="menu-item"><div class="menu-item-info"><h4>Tart Cherry Cooler</h4><p>เชอร์รี่เปรี้ยวหวาน เย็นฉ่ำ</p></div><span class="price">฿135</span></div>
+          <div class="menu-item"><div class="menu-item-info"><h4>Matcha Cryo</h4><p>มัทฉะลาเต้เย็น หอมกรุ่น</p></div><span class="price">฿145</span></div>
+        </div>
+        <div class="menu-category">
+          <h3>🍰 ขนมอบ & ของหวาน</h3>
+          <div class="menu-item"><div class="menu-item-info"><h4>Medovik (Honey Cake)</h4><p>เค้กน้ำผึ้งชั้นบางๆ สูตรรัสเซียแท้</p></div><span class="price">฿165</span></div>
+          <div class="menu-item"><div class="menu-item-info"><h4>Syrniki</h4><p>แพนเค้กชีสหวานเสิร์ฟกับแยมเบอร์รี่</p></div><span class="price">฿145</span></div>
+          <div class="menu-item"><div class="menu-item-info"><h4>Blini with Caviar Cream</h4><p>แพนเค้กบางๆ กับครีมชีสและไข่ปลาจำลอง</p></div><span class="price">฿175</span></div>
+          <div class="menu-item"><div class="menu-item-info"><h4>Chocolate Snezhnaya Tart</h4><p>ทาร์ตช็อกโกแลตเข้ม หน้าวิปครีมหิมะ</p></div><span class="price">฿155</span></div>
+          <div class="menu-item"><div class="menu-item-info"><h4>Pryaniki (Ginger Cookies)</h4><p>คุกกี้ขิงอบกรอบ หอมเครื่องเทศ</p></div><span class="price">฿95</span></div>
+        </div>
+        <div class="menu-category">
+          <h3>🍽️ อาหารเบาๆ</h3>
+          <div class="menu-item"><div class="menu-item-info"><h4>Borscht Soup</h4><p>ซุปบีทรูทแดงร้อนๆ เสิร์ฟกับครีมซาวร์</p></div><span class="price">฿165</span></div>
+          <div class="menu-item"><div class="menu-item-info"><h4>Beef Stroganoff Mini</h4><p>เนื้อสโตรกานอฟเสิร์ฟบนขนมปัง</p></div><span class="price">฿195</span></div>
+          <div class="menu-item"><div class="menu-item-info"><h4>Smoked Salmon Open Sandwich</h4><p>แซนด์วิชเปิดหน้าแซลมอนรมควัน</p></div><span class="price">฿185</span></div>
+          <div class="menu-item"><div class="menu-item-info"><h4>Mushroom Pelmeni</h4><p>เกี๊ยวรัสเซียไส้เห็ดครีม</p></div><span class="price">฿175</span></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========== ABOUT ========== -->
+  <div class="page" id="page-about">
+    <div class="page-hero">
+      <div class="subtitle" style="color: var(--accent); letter-spacing: 3px; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 0.5rem;">Our Story</div>
+      <h1>เรื่องราวของเรา</h1>
+      <p>จากความรักใน Genshin Impact สู่คาเฟ่ที่เต็มไปด้วยจิตวิญญาณของ Snezhnaya</p>
+    </div>
+    <section class="section">
+      <div class="about-grid">
+        <div class="about-image"><div class="placeholder">🏰❄</div></div>
+        <div class="about-content">
+          <h2>ยินดีต้อนรับสู่ดินแดนแห่งน้ำแข็ง</h2>
+          <p>Snezhnaya Café เกิดจากความหลงใหลในโลกของ Teyvat โดยเฉพาะดินแดน Snezhnaya ที่เต็มไปด้วยความงามอันเยือกเย็น ทองคำเปล่งประกาย และวัฒนธรรมอันสง่างาม</p>
+          <p>เราอยากสร้างพื้นที่ที่ให้ทุกคนได้สัมผัสบรรยากาศแบบนั้นได้จริงๆ ไม่ว่าจะเป็นการจิบกาแฟอุ่นๆ ท่ามกลางแสงไฟนวลตา หรือการลิ้มรสขนมอบสูตรรัสเซียแท้</p>
+          <p>ทุกมุมของร้านถูกออกแบบด้วยโทนสีน้ำเงินเข้ม ขาว และทองคำ พร้อมรายละเอียดเล็กๆ น้อยๆ ที่จะพาคุณหลงใหลในโลกแฟนตาซี</p>
+          <div class="about-stats">
+            <div class="stat"><div class="stat-num">2024</div><div class="stat-label">เปิดให้บริการ</div></div>
+            <div class="stat"><div class="stat-num">50+</div><div class="stat-label">เมนูพิเศษ</div></div>
+            <div class="stat"><div class="stat-num">∞</div><div class="stat-label">ความอบอุ่น</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section" style="padding-top: 0;">
+      <div class="section-header">
+        <div class="subtitle">Our Values</div>
+        <h2>สิ่งที่เราเชื่อ</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="features">
+        <div class="feature-card"><div class="feature-icon">🎨</div><h3>ดีไซน์ที่ใส่ใจ</h3><p>ทุกองค์ประกอบถูกคัดสรรมาเพื่อสร้างบรรยากาศที่สมจริงและสวยงามตามธีม Snezhnaya</p></div>
+        <div class="feature-card"><div class="feature-icon">❤️</div><h3>ความอบอุ่นจากใจ</h3><p>แม้บรรยากาศจะเย็นเฉียบ แต่บริการและรสชาติของเราเต็มไปด้วยความอบอุ่น</p></div>
+        <div class="feature-card"><div class="feature-icon">🌟</div><h3>คุณภาพระดับพรีเมียม</h3><p>วัตถุดิบคัดสรร ทำสดใหม่ทุกวัน เพื่อมอบประสบการณ์ที่ดีที่สุดให้คุณ</p></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========== GALLERY ========== -->
+  <div class="page" id="page-gallery">
+    <div class="page-hero">
+      <div class="subtitle" style="color: var(--accent); letter-spacing: 3px; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 0.5rem;">Gallery</div>
+      <h1>ภาพบรรยากาศร้าน</h1>
+      <p>เดินเล่นในดินแดนหิมะผ่านภาพเหล่านี้</p>
+    </div>
+    <section class="section">
+      <div class="gallery-grid">
+        <div class="gallery-item">🏛️<span>มุมหลักของร้าน</span></div>
+        <div class="gallery-item">☕<span>เคาน์เตอร์กาแฟ</span></div>
+        <div class="gallery-item">🛋️<span>โซนนั่งเล่นอบอุ่น</span></div>
+        <div class="gallery-item">❄️<span>ไฟประดับธีมหิมะ</span></div>
+        <div class="gallery-item">🍰<span>ตู้ขนมอบสด</span></div>
+        <div class="gallery-item">🪟<span>หน้าต่างวิวหิมะ</span></div>
+        <div class="gallery-item">🕯️<span>โต๊ะเทียนแสงนวล</span></div>
+        <div class="gallery-item">🪞<span>มุมถ่ายรูปสวยๆ</span></div>
+        <div class="gallery-item">📜<span>เมนูโบราณบนผนัง</span></div>
+        <div class="gallery-item">🎶<span>โซนดนตรีเบาๆ</span></div>
+        <div class="gallery-item">🌿<span>ต้นไม้ประดับในร่ม</span></div>
+        <div class="gallery-item">✨<span>รายละเอียดทองคำ</span></div>
+      </div>
+      <div style="text-align: center; margin-top: 3rem;">
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">* ภาพจริงจะถูกอัปเดตเร็วๆ นี้ — ตอนนี้เป็นไอคอนแสดงแนวคิดการตกแต่ง</p>
+        <a class="btn btn-primary" onclick="showPage('contact')">จองโต๊ะมาสัมผัสจริง</a>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========== CONTACT ========== -->
+  <div class="page" id="page-contact">
+    <div class="page-hero">
+      <div class="subtitle" style="color: var(--accent); letter-spacing: 3px; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 0.5rem;">Contact & Reservation</div>
+      <h1>ติดต่อเรา & จองโต๊ะ</h1>
+      <p>พร้อมต้อนรับคุณสู่ดินแดนแห่งสายลมเหนือ</p>
+    </div>
+    <section class="section">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="info-card"><div class="info-icon">📍</div><div><h4>ที่อยู่</h4><p>123 ถนนสายลมเหนือ<br>แขวงหิมะขาว เขตทองคำ<br>กรุงเทพฯ 10110</p></div></div>
+          <div class="info-card"><div class="info-icon">🕐</div><div><h4>เวลาเปิดทำการ</h4><p>จันทร์ – อาทิตย์<br>10:00 – 22:00 น.</p></div></div>
+          <div class="info-card"><div class="info-icon">📞</div><div><h4>โทรศัพท์</h4><p>02-XXX-XXXX<br>Line: @snezhnayacafe</p></div></div>
+          <div class="info-card"><div class="info-icon">✉️</div><div><h4>อีเมล</h4><p>hello@snezhnaya.cafe<br>reservation@snezhnaya.cafe</p></div></div>
+        </div>
+        <div class="contact-form">
+          <h3 style="font-family: 'Cinzel', serif; color: var(--accent-soft); margin-bottom: 1.5rem; font-size: 1.4rem;">📝 จองโต๊ะออนไลน์</h3>
+          <form id="reserveForm">
+            <div class="form-row">
+              <div class="form-group"><label for="name">ชื่อ-นามสกุล *</label><input type="text" id="name" required placeholder="ชื่อของคุณ"></div>
+              <div class="form-group"><label for="phone">เบอร์โทร *</label><input type="tel" id="phone" required placeholder="08X-XXX-XXXX"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label for="date">วันที่ *</label><input type="date" id="date" required></div>
+              <div class="form-group">
+                <label for="time">เวลา *</label>
+                <select id="time" required>
+                  <option value="">เลือกเวลา</option>
+                  <option>10:00</option><option>11:00</option><option>12:00</option><option>13:00</option>
+                  <option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option>
+                  <option>18:00</option><option>19:00</option><option>20:00</option><option>21:00</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="guests">จำนวนคน *</label>
+              <select id="guests" required>
+                <option value="">เลือกจำนวน</option>
+                <option>1 คน</option><option>2 คน</option><option>3 คน</option><option>4 คน</option>
+                <option>5 คน</option><option>6 คน</option><option>7 คนขึ้นไป</option>
+              </select>
+            </div>
+            <div class="form-group"><label for="note">หมายเหตุเพิ่มเติม</label><textarea id="note" placeholder="เช่น ต้องการโต๊ะริมหน้าต่าง, วันเกิด, แพ้อาหาร ฯลฯ"></textarea></div>
+            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">ส่งคำขอจองโต๊ะ</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="logo-text" style="color: var(--accent);">❄ Snezhnaya <span style="color: var(--ice);">Café</span></div>
+        <p>คาเฟ่ธีม Snezhnaya จาก Genshin Impact — ที่ซึ่งความหนาวเย็นมาพร้อมกับความอบอุ่นในหัวใจ</p>
+      </div>
+      <div>
+        <h4>เมนูหลัก</h4>
+        <ul>
+          <li><a onclick="showPage('menu')">เครื่องดื่ม</a></li>
+          <li><a onclick="showPage('menu')">ขนมอบ</a></li>
+          <li><a onclick="showPage('menu')">อาหารเบาๆ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>ติดต่อ</h4>
+        <ul>
+          <li><a onclick="showPage('contact')">จองโต๊ะ</a></li>
+          <li><a onclick="showPage('about')">เกี่ยวกับเรา</a></li>
+          <li><a onclick="showPage('gallery')">แกลเลอรี</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 Snezhnaya Café. Inspired by Genshin Impact's Snezhnaya. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    // Snow
+    (function createSnow() {
+      const container = document.getElementById('snow');
+      const flakes = ['❄','❅','❆','✻','✼'];
+      for (let i = 0; i < 40; i++) {
+        const el = document.createElement('div');
+        el.className = 'snowflake';
+        el.textContent = flakes[Math.floor(Math.random() * flakes.length)];
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.fontSize = (Math.random() * 1.2 + 0.5) + 'rem';
+        el.style.animationDuration = (Math.random() * 8 + 6) + 's';
+        el.style.animationDelay = (Math.random() * 5) + 's';
+        el.style.opacity = Math.random() * 0.6 + 0.3;
+        container.appendChild(el);
+      }
+    })();
+
+    // Page switcher
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById('page-' + pageId);
+      if (target) target.classList.add('active');
+
+      document.querySelectorAll('.nav-links a').forEach(a => {
+        a.classList.toggle('active', a.dataset.page === pageId);
+      });
+
+      // Close mobile menu
+      document.getElementById('navLinks').classList.remove('open');
+      document.getElementById('menuToggle').textContent = '☰';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Nav click
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.addEventListener('click', () => showPage(a.dataset.page));
+    });
+
+    // Mobile menu
+    document.getElementById('menuToggle').addEventListener('click', () => {
+      const links = document.getElementById('navLinks');
+      links.classList.toggle('open');
+      document.getElementById('menuToggle').textContent = links.classList.contains('open') ? '✕' : '☰';
+    });
+
+    // Navbar scroll
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Form
+    document.getElementById('reserveForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('button[type="submit"]');
+      const original = btn.textContent;
+      btn.textContent = '✓ ส่งเรียบร้อย!';
+      btn.style.background = 'linear-gradient(135deg, #2d8a4e, #1a5c32)';
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.style.background = '';
+        btn.disabled = false;
+        this.reset();
+      }, 3000);
+    });
+  </script>
+</body>
+</html>
