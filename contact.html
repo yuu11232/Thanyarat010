@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ติดต่อ & จองโต๊ะ | Snezhnaya Café</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="snow"></div>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">❄</span>
+        <span class="logo-text">Snezhnaya <span>Café</span></span>
+      </a>
+      <button class="menu-toggle" aria-label="เมนู">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">หน้าแรก</a></li>
+        <li><a href="menu.html">เมนู</a></li>
+        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+        <li><a href="gallery.html">แกลเลอรี</a></li>
+        <li><a href="contact.html" class="active">ติดต่อ & จองโต๊ะ</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <div class="subtitle" style="color: var(--accent); letter-spacing: 3px; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 0.5rem;">Contact & Reservation</div>
+    <h1>ติดต่อเรา & จองโต๊ะ</h1>
+    <p>พร้อมต้อนรับคุณสู่ดินแดนแห่งสายลมเหนือ</p>
+  </div>
+
+  <section class="section">
+    <div class="contact-grid">
+      <!-- Info -->
+      <div class="contact-info">
+        <div class="info-card">
+          <div class="info-icon">📍</div>
+          <div>
+            <h4>ที่อยู่</h4>
+            <p>123 ถนนสายลมเหนือ<br>แขวงหิมะขาว เขตทองคำ<br>กรุงเทพฯ 10110</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">🕐</div>
+          <div>
+            <h4>เวลาเปิดทำการ</h4>
+            <p>จันทร์ – อาทิตย์<br>10:00 – 22:00 น.</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">📞</div>
+          <div>
+            <h4>โทรศัพท์</h4>
+            <p>02-XXX-XXXX<br>Line: @snezhnayacafe</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">✉️</div>
+          <div>
+            <h4>อีเมล</h4>
+            <p>hello@snezhnaya.cafe<br>reservation@snezhnaya.cafe</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="contact-form">
+        <h3 style="font-family: 'Cinzel', serif; color: var(--accent-soft); margin-bottom: 1.5rem; font-size: 1.4rem;">
+          📝 จองโต๊ะออนไลน์
+        </h3>
+        <form>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">ชื่อ-นามสกุล *</label>
+              <input type="text" id="name" name="name" required placeholder="ชื่อของคุณ">
+            </div>
+            <div class="form-group">
+              <label for="phone">เบอร์โทร *</label>
+              <input type="tel" id="phone" name="phone" required placeholder="08X-XXX-XXXX">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="date">วันที่ *</label>
+              <input type="date" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+              <label for="time">เวลา *</label>
+              <select id="time" name="time" required>
+                <option value="">เลือกเวลา</option>
+                <option value="10:00">10:00</option>
+                <option value="11:00">11:00</option>
+                <option value="12:00">12:00</option>
+                <option value="13:00">13:00</option>
+                <option value="14:00">14:00</option>
+                <option value="15:00">15:00</option>
+                <option value="16:00">16:00</option>
+                <option value="17:00">17:00</option>
+                <option value="18:00">18:00</option>
+                <option value="19:00">19:00</option>
+                <option value="20:00">20:00</option>
+                <option value="21:00">21:00</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="guests">จำนวนคน *</label>
+            <select id="guests" name="guests" required>
+              <option value="">เลือกจำนวน</option>
+              <option value="1">1 คน</option>
+              <option value="2">2 คน</option>
+              <option value="3">3 คน</option>
+              <option value="4">4 คน</option>
+              <option value="5">5 คน</option>
+              <option value="6">6 คน</option>
+              <option value="7+">7 คนขึ้นไป</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="note">หมายเหตุเพิ่มเติม</label>
+            <textarea id="note" name="note" placeholder="เช่น ต้องการโต๊ะริมหน้าต่าง, วันเกิด, แพ้อาหาร ฯลฯ"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+            ส่งคำขอจองโต๊ะ
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="logo-text" style="color: var(--accent);">❄ Snezhnaya <span style="color: var(--ice);">Café</span></div>
+        <p>คาเฟ่ธีม Snezhnaya จาก Genshin Impact — ที่ซึ่งความหนาวเย็นมาพร้อมกับความอบอุ่นในหัวใจ</p>
+      </div>
+      <div>
+        <h4>เมนูหลัก</h4>
+        <ul>
+          <li><a href="menu.html">เครื่องดื่ม</a></li>
+          <li><a href="menu.html">ขนมอบ</a></li>
+          <li><a href="menu.html">อาหารเบาๆ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>ติดต่อ</h4>
+        <ul>
+          <li><a href="contact.html">จองโต๊ะ</a></li>
+          <li><a href="about.html">เกี่ยวกับเรา</a></li>
+          <li><a href="gallery.html">แกลเลอรี</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 Snezhnaya Café. Inspired by Genshin Impact's Snezhnaya. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
